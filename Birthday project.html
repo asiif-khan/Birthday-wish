@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="A premium screen-by-screen recreation of the reference experience.">
+  <title>A Surprise For You ❤️</title>
+  
+  <!-- Styling Sheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Personalized Data Config (Loads first so variables are available) -->
+  <script src="config.js"></script>
+</head>
+<body>
+
+  <!-- Ambient background digital matrix rain canvas (corresponds to video opening state) -->
+  <canvas id="canvas-matrix" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.15;"></canvas>
+
+  <!-- Ambient background floating heart particle layer -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Falling Confetti celebration canvas for final screen -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Main viewport wrap container mock -->
+  <div class="app-container">
+    
+    <!-- Floating Audio Toggle button (top right) -->
+    <button id="music-toggle" class="music-toggle" aria-label="Toggle background music">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+      </svg>
+    </button>
+    <div id="audio-hint" class="audio-hint"></div>
+
+    <!-- SCREEN 1: PREPARATION / LOADING SCREEN -->
+    <section id="screen-loading" class="screen active">
+      <div class="loader-container">
+        <h2 id="loader-title" class="loader-title">Initializing...</h2>
+        <div class="loader-bar-bg">
+          <div id="loader-bar-fill" class="loader-bar-fill"></div>
+        </div>
+        <div id="loader-percent" class="loader-percentage">0%</div>
+        <button id="loader-btn" class="btn-outlined" data-action="next">Found 1 Result ❤️</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: ENVELOPE FLAP CARD -->
+    <section id="screen-envelope" class="screen">
+      <div class="envelope-container">
+        <div class="envelope-flap-svg-container" style="position: relative; width: 100%; height: 60px; display: flex; justify-content: center; align-items: flex-end;">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; fill: rgba(255, 245, 247, 0.96); z-index: 1;">
+            <polygon points="0,100 50,0 100,100" />
+          </svg>
+          <span class="envelope-flap-label" style="position: relative; z-index: 2;">for you</span>
+        </div>
+        <div id="envelope-body" class="envelope-body">
+          <!-- config lines dynamically injected here -->
+        </div>
+      </div>
+      <button class="btn-solid-pink" data-action="next">Next</button>
+    </section>
+
+    <!-- SCREEN 3: MESSAGE DETAILS CARD -->
+    <section id="screen-message" class="screen">
+      <div class="card-opaque">
+        <h2 class="cursive-title">for you</h2>
+        <p id="msg-card-text" class="body-text-dark"></p>
+      </div>
+      <button class="btn-solid-pink" data-action="next">Next</button>
+    </section>
+
+    <!-- SCREEN 4: CHOICE SCREEN (LATE NIGHT TALKS? 🌙) -->
+    <section id="screen-choice" class="screen">
+      <div class="card-translucent">
+        <div style="font-size: 3rem; margin-bottom: 12px; display: inline-block;">🌙</div>
+        <h2 id="choice-question" style="font-size: 1.3rem; font-weight: 600; margin: 10px 0 20px 0;">Late Night Talks?</h2>
+        <div class="choice-buttons-row">
+          <button id="choice-left" class="btn-choice" data-action="next">100%</button>
+          <button id="choice-right" class="btn-choice" data-action="next">FOREVER</button>
+        </div>
+        <div class="pager-dots">
+          <span class="pager-dot"></span>
+          <span class="pager-dot active"></span>
+          <span class="pager-dot"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 5: MUSIC PLAYER CARD SCREEN (Us ❤️) -->
+    <section id="screen-music" class="screen">
+      <div class="card-translucent" style="margin-bottom: 20px;">
+        <div class="record-container">
+          <div id="record-disk" class="vinyl-disk">
+            <div class="vinyl-center"></div>
+          </div>
+          <div class="record-info">
+            <h3 id="music-title" class="record-title">Us ❤️</h3>
+            <p id="music-subtitle" class="record-subtitle">Our Story</p>
+          </div>
+        </div>
+        <div id="eq-visualizer" class="eq-visualizer">
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+        </div>
+        <div class="player-slider-container">
+          <div class="player-slider">
+            <div class="player-slider-fill"></div>
+          </div>
+        </div>
+        <button id="play-button" class="btn-choice" style="margin-top: 20px;">❤️ Playing...</button>
+      </div>
+      <p id="music-quote" class="extra-text" style="max-width: 290px; text-shadow: 0 2px 10px rgba(0,0,0,0.4);"></p>
+      <button class="btn-solid-pink" data-action="next" style="margin-top: 15px;">Next</button>
+    </section>
+
+    <!-- SCREEN 6: PROPOSAL CARD (Yes/No Stack) -->
+    <section id="screen-proposal" class="screen">
+      <div class="card-translucent">
+        <h2 id="proposal-question" style="font-size: 1.35rem; font-weight: 600; line-height: 1.5; margin: 10px 0 20px 0;">Will You Blow the Candles?</h2>
+        <div class="pulse-heart">❤️</div>
+        <div class="btn-vertical-stack">
+          <button id="yes-btn" class="btn-yes" data-action="next">💖 YES!</button>
+          <button id="no-btn" class="btn-no-out">🙈 SHAYAD NAHI</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 7: FINAL CELEBRATION CARD -->
+    <section id="screen-celebration" class="screen">
+      <h1 id="celebrate-title" class="cursive-title" style="font-size: 2.8rem; color: #fff; margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,45,85,0.6);">Yayyyyyyyyy 🎉</h1>
+      <div id="celebrate-body" style="text-align: center; margin-bottom: 20px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+        <!-- config lines dynamically injected here -->
+      </div>
+      <div class="ring-graphic">
+        <div class="ring-circle"></div>
+        <div class="ring-diamond"></div>
+      </div>
+      <button id="celebrate-btn" class="btn-solid-pink" style="margin-top: 20px;">Celebrate! 🥳</button>
+    </section>
+  </div>
+
+  <!-- Background digital matrix rain canvas simulator -->
+  <script>
+    const mCanvas = document.getElementById('canvas-matrix');
+    if (mCanvas) {
+      const mCtx = mCanvas.getContext('2d');
+      mCanvas.width = window.innerWidth;
+      mCanvas.height = window.innerHeight;
+      
+      const letters = 'I LOVE UI LOVE UI LOVE UI LOVE UI LOVE U ❤';
+      const charArr = letters.split('');
+      const fontSize = 10;
+      const columns = mCanvas.width / fontSize;
+      const drops = Array(Math.floor(columns)).fill(1);
+
+      function drawMatrix() {
+        mCtx.fillStyle = 'rgba(0, 0, 0, .08)';
+        mCtx.fillRect(0, 0, mCanvas.width, mCanvas.height);
+        mCtx.fillStyle = '#ff5ba5';
+        mCtx.font = fontSize + 'px sans-serif';
+        for (let i = 0; i < drops.length; i++) {
+          const text = charArr[Math.floor(Math.random() * charArr.length)];
+          mCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+          drops[i]++;
+          if (drops[i] * fontSize > mCanvas.height && Math.random() > .975) {
+            drops[i] = 0;
+          }
+        }
+      }
+      setInterval(drawMatrix, 35);
+      window.addEventListener('resize', () => {
+        mCanvas.width = window.innerWidth;
+        mCanvas.height = window.innerHeight;
+      });
+    }
+  </script>
+
+  <!-- Interaction Logic Sheet -->
+  <script src="script.js"></script>
+
+</body>
+</html>
