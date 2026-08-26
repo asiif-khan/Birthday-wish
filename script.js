@@ -453,7 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (audio) {
         audio.pause();
       }
-      window.location.href = "index.html";
+      window.location.href = "final wish.html";
     });
   }
 
